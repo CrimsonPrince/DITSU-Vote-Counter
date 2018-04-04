@@ -294,9 +294,10 @@ class Login
             echo $this->feedback . "<br/><br/>";
         }
         include('top.php');
-        echo '<div class="container grey lighten-4 z-depth-5">';
-        echo '<h2 class="blue-text">Registration</h2>';
 
+        echo '<div class="container grey lighten-4 z-depth-5">';
+        echo '<div class="container row">';
+        echo '<h2 class="blue-text">Registration</h2>';
         echo '<form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?action=register" name="registerform">';
         echo '<label for="login_input_username"><h6 class="blue-text">Username (only letters and numbers, 2 to 64 characters)</h6></label>';
         echo '<input id="login_input_username" type="text" pattern="[a-zA-Z0-9]{2,64}" name="user_name" class="validate" required />';
@@ -306,10 +307,11 @@ class Login
         echo '<input id="login_input_password_new" class="login_input" type="password" name="user_password_new" pattern=".{6,}" required autocomplete="off" />';
         echo '<label for="login_input_password_repeat"><h6 class="blue-text">Repeat password</h6></label>';
         echo '<input id="login_input_password_repeat" class="login_input" type="password" name="user_password_repeat" pattern=".{6,}" required autocomplete="off" />';
-        echo '<input type="submit"class="btn btn-large waves-effects blue" name="register" value="Register" />';
+        echo '<input type="submit"class="btn btn-large waves-effects blue col s3 offset-s2" name="register" value="Register" />';
         echo '</form>';
 
-        echo '<a href="' . $_SERVER['SCRIPT_NAME'] . '">Homepage</a>';
+        echo '<a class="btn btn-large waves-effects blue col s3 offset-s2" href="' . $_SERVER['SCRIPT_NAME'] . '">Login</a>';
+        echo '</div>';
         echo '</div>';
 
         include('bottom.php');
