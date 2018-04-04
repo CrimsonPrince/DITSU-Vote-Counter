@@ -294,19 +294,19 @@ class Login
             echo $this->feedback . "<br/><br/>";
         }
         include('top.php');
-        echo '<div class="container">';
-        echo '<h2>Registration</h2>';
+        echo '<div class="container grey lighten-4 z-depth-5">';
+        echo '<h2 class="blue-text">Registration</h2>';
 
         echo '<form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?action=register" name="registerform">';
-        echo '<label for="login_input_username">Username (only letters and numbers, 2 to 64 characters)</label>';
-        echo '<input id="login_input_username" type="text" pattern="[a-zA-Z0-9]{2,64}" name="user_name" required />';
-        echo '<label for="login_input_email">User\'s email</label>';
-        echo '<input id="login_input_email" type="email" name="user_email" required />';
-        echo '<label for="login_input_password_new">Password (min. 6 characters)</label>';
+        echo '<label for="login_input_username"><h6 class="blue-text">Username (only letters and numbers, 2 to 64 characters)</h6></label>';
+        echo '<input id="login_input_username" type="text" pattern="[a-zA-Z0-9]{2,64}" name="user_name" class="validate" required />';
+        echo '<label for="login_input_email"><h6 class="blue-text">User\'s email</h6></label>';
+        echo '<input id="login_input_email" type="email" name="user_email" class="validate" required />';
+        echo '<label for="login_input_password_new"><h6 class="blue-text">Password (min. 6 characters)</h6></label>';
         echo '<input id="login_input_password_new" class="login_input" type="password" name="user_password_new" pattern=".{6,}" required autocomplete="off" />';
-        echo '<label for="login_input_password_repeat">Repeat password</label>';
+        echo '<label for="login_input_password_repeat"><h6 class="blue-text">Repeat password</h6></label>';
         echo '<input id="login_input_password_repeat" class="login_input" type="password" name="user_password_repeat" pattern=".{6,}" required autocomplete="off" />';
-        echo '<input type="submit" name="register" value="Register" />';
+        echo '<input type="submit"class="btn btn-large waves-effects blue" name="register" value="Register" />';
         echo '</form>';
 
         echo '<a href="' . $_SERVER['SCRIPT_NAME'] . '">Homepage</a>';

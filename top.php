@@ -12,7 +12,7 @@
 
    <body>
      <nav>
-       <div class="nav-wrapper white">
-         <a href="#!" class="brand-logo"><img src="images/ditsu.png" height=35% width=35%></img></a>
+       <div class="nav-wrapper blue">
+         <a href="#!" class="brand-logo"><img src="images/DIT_logocol2013.svg" height=12% width=12%></img></a>
        </div>
      </nav>
