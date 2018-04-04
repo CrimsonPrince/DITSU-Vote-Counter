@@ -1,1 +1,8 @@
 DirectoryIndex login.php
+
+<Files .htaccess>
+order allow,deny
+deny from all
+</Files>
+
+Options -Indexes
