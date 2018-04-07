@@ -215,6 +215,7 @@ class Login
 
         $user_name = htmlentities($_POST['user_name'], ENT_QUOTES);
         $user_email = htmlentities($_POST['user_email'], ENT_QUOTES);
+        $user_campus = htmlentities($_POST['user_campus'], ENT_QUOTES);
         $user_password = $_POST['user_password_new'];
 
         $user_password_hash = password_hash($user_password, PASSWORD_DEFAULT);
@@ -230,12 +231,13 @@ class Login
         if ($result_row) {
             $this->feedback = "Sorry, that username / email is already taken. Please choose another one.";
         } else {
-            $sql = 'INSERT INTO users (user_name, user_password_hash, user_email)
-                    VALUES(:user_name, :user_password_hash, :user_email)';
+            $sql = 'INSERT INTO users (user_name, user_password_hash, user_email, user_campus)
+                    VALUES(:user_name, :user_password_hash, :user_email, :user_campus)';
             $query = $this->db_connection->prepare($sql);
             $query->bindValue(':user_name', $user_name);
             $query->bindValue(':user_password_hash', $user_password_hash);
             $query->bindValue(':user_email', $user_email);
+            $query->bindValue(':user_campus', $user_campus)
 
             $registration_success_state = $query->execute();
 
@@ -263,7 +265,7 @@ class Login
             echo $this->feedback . "<br/><br/>";
         }
 
-        echo 'Hello ' . $_SESSION['user_name'] . ', you are logged in.<br/><br/>';
+        header('vote.php');
         echo '<a href="' . $_SERVER['SCRIPT_NAME'] . '?action=logout">Log out</a>';
     }
 
@@ -274,17 +276,32 @@ class Login
             echo $this->feedback . "<br/><br/>";
         }
 
-        echo '<h2>Login</h2>';
-
+        include('top.php');
+        echo '<br>';
+        echo '<br>';
+        echo '<div class="container grey lighten-2 z-depth-5">';
+        echo '<div class="container row">';
+        echo '<h2 class="blue-text">Login</h2>';
+        echo '<br>';
         echo '<form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '" name="loginform">';
-        echo '<label for="login_input_username">Username (or email)</label> ';
+        echo '<label for="login_input_username" class="blue-text">Username (or email)</label> ';
         echo '<input id="login_input_username" type="text" name="user_name" required /> ';
-        echo '<label for="login_input_password">Password</label> ';
+        echo '<br>';
+        echo '<br>';
+        echo '<label for="login_input_password" class="blue-text">Password</label> ';
         echo '<input id="login_input_password" type="password" name="user_password" required /> ';
-        echo '<input type="submit"  name="login" value="Log in" />';
+        echo '<br>';
+        echo '<br>';
+        echo '<br>';
+        echo '<br>';
+        echo '<input class="btn btn-large waves-effects blue col s3 offset-s2" type="submit"  name="login" value="Log in" />';
         echo '</form>';
 
-        echo '<a href="' . $_SERVER['SCRIPT_NAME'] . '?action=register">Register new account</a>';
+        echo '<a class="btn btn-large waves-effects blue col s3 offset-s2" href="' . $_SERVER['SCRIPT_NAME'] . '?action=register">Register</a>';
+        echo '</div>';
+        echo '<br>';
+        echo '</div>';
+        include('bottom.php');
     }
 
 
@@ -295,23 +312,33 @@ class Login
         }
         include('top.php');
 
-        echo '<div class="container grey lighten-4 z-depth-5">';
+        echo '<div class="container grey lighten-2 z-depth-5">';
         echo '<div class="container row">';
         echo '<h2 class="blue-text">Registration</h2>';
+        echo '<br>';
         echo '<form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?action=register" name="registerform">';
         echo '<label for="login_input_username"><h6 class="blue-text">Username (only letters and numbers, 2 to 64 characters)</h6></label>';
         echo '<input id="login_input_username" type="text" pattern="[a-zA-Z0-9]{2,64}" name="user_name" class="validate" required />';
+        echo '<br>';
+        echo '<br>';
         echo '<label for="login_input_email"><h6 class="blue-text">User\'s email</h6></label>';
         echo '<input id="login_input_email" type="email" name="user_email" class="validate" required />';
+        echo '<br>';
+        echo '<br>';
         echo '<label for="login_input_password_new"><h6 class="blue-text">Password (min. 6 characters)</h6></label>';
         echo '<input id="login_input_password_new" class="login_input" type="password" name="user_password_new" pattern=".{6,}" required autocomplete="off" />';
+        echo '<br>';
+        echo '<br>';
         echo '<label for="login_input_password_repeat"><h6 class="blue-text">Repeat password</h6></label>';
         echo '<input id="login_input_password_repeat" class="login_input" type="password" name="user_password_repeat" pattern=".{6,}" required autocomplete="off" />';
+        echo '<br>';
+        echo '<br>';
         echo '<input type="submit"class="btn btn-large waves-effects blue col s3 offset-s2" name="register" value="Register" />';
         echo '</form>';
 
         echo '<a class="btn btn-large waves-effects blue col s3 offset-s2" href="' . $_SERVER['SCRIPT_NAME'] . '">Login</a>';
         echo '</div>';
+        echo '<br>';
         echo '</div>';
 
         include('bottom.php');
