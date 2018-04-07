@@ -21,6 +21,7 @@ class Login
         $username = $config['username'];
         $password = $config['password'];
         $dbname = "users";
+        $campus = ('Bolton St','Kevin St','Aungier St','Cathal Brugha St','Grangegorman','Rathmines/BIMM');
         $this->start();
     }
 
@@ -180,6 +181,8 @@ class Login
             && strlen($_POST['user_password_new']) >= 6
             && !empty($_POST['user_password_repeat'])
             && ($_POST['user_password_new'] === $_POST['user_password_repeat'])
+            && !empty($_POST['user_campus'])
+            && in_array($_POST['user_campus'], $campus, true)
         ) {
 
             return true;
@@ -204,6 +207,7 @@ class Login
         } else {
             $this->feedback = "An unknown error occurred.";
         }
+
 
 
         return false;
@@ -320,18 +324,21 @@ class Login
         echo '<label for="login_input_username"><h6 class="blue-text">Username (only letters and numbers, 2 to 64 characters)</h6></label>';
         echo '<input id="login_input_username" type="text" pattern="[a-zA-Z0-9]{2,64}" name="user_name" class="validate" required />';
         echo '<br>';
-        echo '<br>';
         echo '<label for="login_input_email"><h6 class="blue-text">User\'s email</h6></label>';
         echo '<input id="login_input_email" type="email" name="user_email" class="validate" required />';
-        echo '<br>';
         echo '<br>';
         echo '<label for="login_input_password_new"><h6 class="blue-text">Password (min. 6 characters)</h6></label>';
         echo '<input id="login_input_password_new" class="login_input" type="password" name="user_password_new" pattern=".{6,}" required autocomplete="off" />';
         echo '<br>';
-        echo '<br>';
         echo '<label for="login_input_password_repeat"><h6 class="blue-text">Repeat password</h6></label>';
         echo '<input id="login_input_password_repeat" class="login_input" type="password" name="user_password_repeat" pattern=".{6,}" required autocomplete="off" />';
-        echo '<br>';
+        echo '<select class="icons">
+        <option value="" disabled selected>Choose your option</option>
+        <option value="" data-icon="images/sample-1.jpg" class="left">example 1</option>
+        <option value="" data-icon="images/office.jpg" class="left">example 2</option>
+        <option value="" data-icon="images/yuna.jpg" class="left">example 3</option>
+        </select>
+        <label>Images in select</label>';
         echo '<br>';
         echo '<input type="submit"class="btn btn-large waves-effects blue col s3 offset-s2" name="register" value="Register" />';
         echo '</form>';
