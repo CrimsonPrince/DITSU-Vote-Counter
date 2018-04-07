@@ -14,15 +14,10 @@ class Login
     public $feedback = "";
 
 
+
     public function __construct()
     {
-        $config = $config = parse_ini_file('config/config.ini');
-        $servername = $config['servername'];
-        $username = $config['username'];
-        $password = $config['password'];
-        $dbname = "users";
-        $campus = ('Bolton St','Kevin St','Aungier St','Cathal Brugha St','Grangegorman','Rathmines/BIMM');
-        $this->start();
+      $this->start();
     }
 
 
@@ -48,8 +43,15 @@ class Login
 
     private function createDatabaseConnection()
     {
+
+        $config = $config = parse_ini_file('config/config.ini');
+        $servername = $config['servername'];
+        $username = $config['username'];
+        $password = $config['password'];
+        $dbname = "users";
+
         try {
-            $this->db_connection = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+            $this->db_connection = new PDO("mysql:host=$this->servername;dbname=$this->dbname", "$this->username", "$this->password");
             return true;
         } catch (PDOException $e) {
             $this->feedback = "PDO database connection problem: " . $e->getMessage();
@@ -165,6 +167,8 @@ class Login
     private function checkRegistrationData()
     {
 
+        $campus = array("Bolton St","Kevin St","Aungier St","Cathal Brugha St","Grangegorman","Rathmines/BIMM");
+
         if (!isset($_POST["register"])) {
             return false;
         }
@@ -182,7 +186,7 @@ class Login
             && !empty($_POST['user_password_repeat'])
             && ($_POST['user_password_new'] === $_POST['user_password_repeat'])
             && !empty($_POST['user_campus'])
-            && in_array($_POST['user_campus'], $campus, true)
+            && in_array($_POST['user_campus'], $campus , true)
         ) {
 
             return true;
@@ -235,15 +239,15 @@ class Login
         if ($result_row) {
             $this->feedback = "Sorry, that username / email is already taken. Please choose another one.";
         } else {
-            $sql = 'INSERT INTO users (user_name, user_password_hash, user_email, user_campus)
-                    VALUES(:user_name, :user_password_hash, :user_email, :user_campus)';
+            $sql = 'INSERT INTO users (user_name, user_password_hash, user_email)
+                    VALUES(:user_name, :user_password_hash, :user_email)';
             $query = $this->db_connection->prepare($sql);
             $query->bindValue(':user_name', $user_name);
             $query->bindValue(':user_password_hash', $user_password_hash);
             $query->bindValue(':user_email', $user_email);
-            $query->bindValue(':user_campus', $user_campus)
 
             $registration_success_state = $query->execute();
+            print_r($query->errorInfo());
 
             if ($registration_success_state) {
                 $this->feedback = "Your account has been created successfully. You can now log in.";
@@ -332,13 +336,18 @@ class Login
         echo '<br>';
         echo '<label for="login_input_password_repeat"><h6 class="blue-text">Repeat password</h6></label>';
         echo '<input id="login_input_password_repeat" class="login_input" type="password" name="user_password_repeat" pattern=".{6,}" required autocomplete="off" />';
-        echo '<select class="icons">
-        <option value="" disabled selected>Choose your option</option>
-        <option value="" data-icon="images/sample-1.jpg" class="left">example 1</option>
-        <option value="" data-icon="images/office.jpg" class="left">example 2</option>
-        <option value="" data-icon="images/yuna.jpg" class="left">example 3</option>
-        </select>
-        <label>Images in select</label>';
+        echo '<label for="campus"><h6 class="blue-text">Campus</h6></label>';
+        echo '<div class="input-field">';
+        echo '<select class="icons" id="campus" name="user_campus">';
+        echo '<option value="" disabled selected>Choose your Campus</option>';
+        echo '<option value="Aungier St" data-icon="images/DIT-Aungier-Street-750x500.jpg" class="left">Aungier St</option>';
+        echo '<option value="Bolton St" data-icon="images/bolton.jpg" class="left">Bolton St</option>';
+        echo '<option value="Cathal Brugha St" data-icon="images/CathalBrugha.jpg" class="left">Cathal Brugha St</option>';
+        echo '<option value="Grangegorman" data-icon="images/Grangegorman.jpg" class="left">Grangegorman</option>';
+        echo '<option value="Kevin St" data-icon="images/bd-kevinst-1.jpg" class="left">Kevin St</option>';
+        echo '<option value="Rathmines/BIMM" data-icon="images/DSCN0702-670x790.jpg" class="left">Rathmines/BIMM</option>';
+        echo '</select>';
+        echo '</div>';
         echo '<br>';
         echo '<input type="submit"class="btn btn-large waves-effects blue col s3 offset-s2" name="register" value="Register" />';
         echo '</form>';
@@ -351,6 +360,5 @@ class Login
         include('bottom.php');
     }
 }
-
 
 $application = new Login();
