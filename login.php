@@ -135,7 +135,7 @@ class Login
     private function checkPasswordCorrectnessAndLogin()
     {
 
-        $sql = 'SELECT user_name, user_email, user_password_hash
+        $sql = 'SELECT user_name, user_email, user_password_hash, user_campus
                 FROM users
                 WHERE user_name = :user_name OR user_email = :user_name
                 LIMIT 1';
@@ -151,6 +151,7 @@ class Login
 
                 $_SESSION['user_name'] = $result_row->user_name;
                 $_SESSION['user_email'] = $result_row->user_email;
+                $_SESSION['user_campus'] = $result_row->user_campus;
                 $_SESSION['user_is_logged_in'] = true;
                 $this->user_is_logged_in = true;
                 return true;
@@ -364,3 +365,5 @@ class Login
 }
 
 $application = new Login();
+
+?>
