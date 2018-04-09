@@ -58,7 +58,7 @@ class Display_elections
   {
 
 
-    $sql = 'SELECT name, description, id, campus, image_path
+    $sql = 'SELECT name, description, id, campus, image_path, longdesc
             FROM election
             WHERE campus = :user_campus OR campus = :no_campus';
     $query = $this->db_connection->prepare($sql);
@@ -80,16 +80,16 @@ class Display_elections
                 echo '<div class="card-content">';
                   echo '<span class="card-title activator grey-text text-darken-4">' . $result['name'] . '<i class="material-icons right">more_vert</i></span>';
 
-                  echo '<p><a href="#!">' . $result['description'] . '</a></p>';
+                  echo '<p>' . $result['description'] . '</p>';
               echo '</div>';
 
                 echo '<div class="card-action">';
-                  echo '<a href="#">This is a link</a>';
+                  echo '<a href="election.php?election=' . $result['id'] . '">Vote Now</a>';
                 echo '</div>';
 
                 echo '<div class="card-reveal" style="display: none; transform: translateY(0%);">';
-                  echo '<span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>';
-                  echo '<p>Here is some more information about this product that is only revealed once clicked on.</p>';
+                  echo '<span class="card-title grey-text text-darken-4">' . $result['name'] . '<i class="material-icons right">close</i></span>';
+                  echo '<p>'. $result['longdesc'] . '</p>';
                 echo '</div>';
               echo '</div>';
             echo '</div>';
