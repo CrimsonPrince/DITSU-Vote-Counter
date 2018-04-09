@@ -274,7 +274,7 @@ class Login
             echo $this->feedback . "<br/><br/>";
         }
 
-        header('vote.php');
+        header('Location:main.php');
         echo '<a href="' . $_SERVER['SCRIPT_NAME'] . '?action=logout">Log out</a>';
     }
 
@@ -358,7 +358,7 @@ class Login
         include('bottom.php');
 
         if ($this->feedback) {
-        echo "<script>M.toast({html:'$this->feedback'}, 3000, 'rounded');</script>"; 
+        echo "<script>M.toast({html:'$this->feedback'}, 3000, 'rounded');</script>";
         }
     }
 }
