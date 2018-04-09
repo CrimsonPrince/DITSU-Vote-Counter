@@ -2,7 +2,6 @@
 
 session_start();
 
-echo $_SESSION['user_campus'];
 if(isset($_SESSION['user_email'],$_SESSION['user_is_logged_in'],$_SESSION['user_name']))
 {
 
@@ -57,23 +56,46 @@ class Display_elections
 
   private function display_election_page()
   {
+
+
     $sql = 'SELECT name, description, id, campus, image_path
             FROM election
-            WHERE campus = :user_campus
-            LIMIT 1';
+            WHERE campus = :user_campus OR campus = :no_campus';
     $query = $this->db_connection->prepare($sql);
     $query->bindValue(':user_campus', $_SESSION['user_campus']);
+    $query->bindValue(':no_campus', 'all');
     $query->execute();
-
-
-    $result_row = $query->fetchObject();
-    if ($result_row) {
-
+    print_r($this->db_connection->errorInfo());
+    $results = $query->fetchAll();
+    if ($results) {
       include("top.php");
+      echo '<div class="container row">';
+      foreach($results as $result)
+      {
+          echo '<div class="col s12 m4">';
+              echo '<div class="card sticky-action" style="overflow: visible;">';
+                echo '<div class="card-image waves-effect waves-block waves-light">';
+                  echo "<img class='activator' height=25% src='" . $result['image_path'] . "'>";
+                echo '</div>';
+                echo '<div class="card-content">';
+                  echo '<span class="card-title activator grey-text text-darken-4">' . $result['name'] . '<i class="material-icons right">more_vert</i></span>';
 
+                  echo '<p><a href="#!">' . $result['description'] . '</a></p>';
+              echo '</div>';
 
+                echo '<div class="card-action">';
+                  echo '<a href="#">This is a link</a>';
+                echo '</div>';
 
-      include("bottom.php");
+                echo '<div class="card-reveal" style="display: none; transform: translateY(0%);">';
+                  echo '<span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>';
+                  echo '<p>Here is some more information about this product that is only revealed once clicked on.</p>';
+                echo '</div>';
+              echo '</div>';
+            echo '</div>';
+    }
+    echo '</div>';
+    include("bottom.php");
 
     }
     else {
