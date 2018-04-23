@@ -65,7 +65,6 @@ class Display_elections
     $query->bindValue(':user_campus', $_SESSION['user_campus']);
     $query->bindValue(':no_campus', 'all');
     $query->execute();
-    print_r($this->db_connection->errorInfo());
     $results = $query->fetchAll();
     if ($results) {
       include("top.php");
@@ -75,7 +74,7 @@ class Display_elections
           echo '<div class="col s12 m4">';
               echo '<div class="card sticky-action" style="overflow: visible;">';
                 echo '<div class="card-image waves-effect waves-block waves-light">';
-                  echo "<img class='activator' height=25% src='" . $result['image_path'] . "'>";
+                  echo '<img class="activator" src=' . $result['image_path'] . " style='height:25vh;' >";
                 echo '</div>';
                 echo '<div class="card-content">';
                   echo '<span class="card-title activator grey-text text-darken-4">' . $result['name'] . '<i class="material-icons right">more_vert</i></span>';
