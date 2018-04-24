@@ -68,7 +68,6 @@ class Election {
     $query = $this->db_connection->prepare($sql);
     $query->bindValue(':id', $_GET['election']);
     $query->execute();
-    print_r($this->db_connection->errorInfo());
     $results = $query->fetchObject();
     if($results->campus === $_SESSION['user_campus'] || $results->campus === "all" )
     {
@@ -80,20 +79,22 @@ class Election {
 
   private function displaycandidates()
   {
-    $sql = 'SELECT name, id, image_path, manifesto
+    $sql = 'SELECT name, id, image_path, manifesto, election_id
             FROM candidates
-            WHERE id = :id';
+            WHERE election_id = :id';
     $query = $this->db_connection->prepare($sql);
     $query->bindValue(':id', $_GET['election']);
     $query->execute();
-    print_r($this->db_connection->errorInfo());
-    $results = $query->fetchObject();
-    if($results->campus === $_SESSION['user_campus'] || $results->campus === "all" )
+    $results = $query->fetchAll();
+    $count = 0;
+    foreach($results as $result)
     {
-      return true;
+      $count++;
+    }
 
       include("top.php");
       echo '<div class="container row">';
+      echo '<form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '" name="electionform">';
       foreach($results as $result)
       {
           echo '<div class="col s12 m4">';
@@ -104,29 +105,25 @@ class Election {
                 echo '<div class="card-content">';
                   echo '<span class="card-title activator grey-text text-darken-4">' . $result['name'] . '<i class="material-icons right">more_vert</i></span>';
 
-                  echo '<p>' . $result['description'] . '</p>';
+                  echo '<p> Read My Manifesto </p>';
               echo '</div>';
 
                 echo '<div class="card-action">';
-                  echo '<a href="election.php?election=' . $result['id'] . '">Vote Now</a>';
+                echo '<label for="login_input_username" class="blue-text">Enter Prefrence 1,2,3...</label> ';
+                echo '<input id="login_input_username" type="number" name="user_name" min="1" max="' . $count. '"/> ';
                 echo '</div>';
 
                 echo '<div class="card-reveal" style="display: none; transform: translateY(0%);">';
                   echo '<span class="card-title grey-text text-darken-4">' . $result['name'] . '<i class="material-icons right">close</i></span>';
-                  echo '<p>'. $result['longdesc'] . '</p>';
+                  echo '<p>'. $result['manifesto'] . '</p>';
                 echo '</div>';
               echo '</div>';
             echo '</div>';
     }
+    echo '<input class="btn btn-large waves-effects blue col s3 offset-s2" type="submit"  name="login" value="Log in" />';
     echo '</div>';
     include("bottom.php");
-
-    }
-    return false;
-
-
   }
-
 
 }
 

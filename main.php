@@ -93,6 +93,7 @@ class Display_elections
               echo '</div>';
             echo '</div>';
     }
+    echo '</form>';
     echo '</div>';
     include("bottom.php");
 
