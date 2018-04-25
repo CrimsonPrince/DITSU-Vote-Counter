@@ -25,15 +25,22 @@ class Election {
 
   public function start()
   {
-
-    $this->createDatabaseConnection();
-    if($this->verifyUser())
+    if(isset($_POST['candidate1']))
     {
-      $this->displaycandidates();
+      $this->createDatabaseConnection();
+
     }
-    else {
-      header('location:main.php');
-    }
+    else
+    {
+            $this->createDatabaseConnection();
+            if($this->verifyUser())
+            {
+              $this->displaycandidates();
+            }
+            else {
+              header('location:main.php');
+            }
+      }
 
 
   }
@@ -86,11 +93,12 @@ class Election {
     $query->bindValue(':id', $_GET['election']);
     $query->execute();
     $results = $query->fetchAll();
-    $count = 0;
+    $total = 0;
     foreach($results as $result)
     {
-      $count++;
+      $total++;
     }
+    $count = $total;
 
       include("top.php");
       echo '<div class="container row">';
@@ -110,7 +118,7 @@ class Election {
 
                 echo '<div class="card-action">';
                 echo '<label for="login_input_username" class="blue-text">Enter Prefrence 1,2,3...</label> ';
-                echo '<input id="login_input_username" type="number" name="user_name" min="1" max="' . $count. '"/> ';
+                echo '<input id="login_input_username" type="number" min="1" max="' . $total. '" name="candidate' . $count-- . '" /> ';
                 echo '</div>';
 
                 echo '<div class="card-reveal" style="display: none; transform: translateY(0%);">';
@@ -123,6 +131,24 @@ class Election {
     echo '<input class="btn btn-large waves-effects blue col s3 offset-s2" type="submit"  name="login" value="Log in" />';
     echo '</div>';
     include("bottom.php");
+  }
+
+  private function countcandidates()
+  {
+    $sql = 'SELECT name, id, image_path, manifesto, election_id
+            FROM candidates
+            WHERE election_id = :id';
+    $query = $this->db_connection->prepare($sql);
+    $query->bindValue(':id', $_GET['election']);
+    $query->execute();
+    $results = $query->fetchAll();
+    $total = 0;
+    foreach($results as $result)
+    {
+      $total++;
+    }
+
+
   }
 
 }
