@@ -28,6 +28,7 @@ class Election {
     if(isset($_POST['candidate1']))
     {
       $this->createDatabaseConnection();
+      $this->countcandidates();
 
     }
     else
@@ -98,7 +99,7 @@ class Election {
     {
       $total++;
     }
-    $count = $total;
+    $count = 0;
 
       include("top.php");
       echo '<div class="container row">';
@@ -118,9 +119,8 @@ class Election {
 
                 echo '<div class="card-action">';
                 echo '<label for="login_input_username" class="blue-text">Enter Prefrence 1,2,3...</label> ';
-                echo '<input id="login_input_username" type="number" min="1" max="' . $total. '" name="candidate' . $count-- . '" /> ';
+                echo '<input id="login_input_username" type="number" min="1" max="' . $total. '" name="candidate' . $count++ . '" /> ';
                 echo '</div>';
-
                 echo '<div class="card-reveal" style="display: none; transform: translateY(0%);">';
                   echo '<span class="card-title grey-text text-darken-4">' . $result['name'] . '<i class="material-icons right">close</i></span>';
                   echo '<p>'. $result['manifesto'] . '</p>';
@@ -128,6 +128,7 @@ class Election {
               echo '</div>';
             echo '</div>';
     }
+    echo '<input type="hidden" name="id" value="' . $_GET['election'] . '"/>';
     echo '<input class="btn btn-large waves-effects blue col s3 offset-s2" type="submit"  name="login" value="Log in" />';
     echo '</div>';
     include("bottom.php");
@@ -139,16 +140,24 @@ class Election {
             FROM candidates
             WHERE election_id = :id';
     $query = $this->db_connection->prepare($sql);
-    $query->bindValue(':id', $_GET['election']);
+    $query->bindValue(':id', $_POST['id']);
     $query->execute();
     $results = $query->fetchAll();
     $total = 0;
+    $count = 1;
+    $data = array();
     foreach($results as $result)
     {
       $total++;
     }
-
-
+    for($i=1;$i<$total;$i++)
+    {
+      foreach($results as $result)
+      {
+        $data += [$result['id'] => $_POST['candidate' . $i]];
+      }
+    }
+    print_r($data);
   }
 
 }
