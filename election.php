@@ -82,6 +82,7 @@ class Election {
     {
       return true;
 
+
     }
     return false;
   }
@@ -151,11 +152,11 @@ class Election {
     $results = $query->fetchAll();
     $data = array();
     $i = 0;
+    $voted = array();
 
       foreach($results as $result)
       {
         $data += [$result['id'] => $_POST['candidate' . $i]];
-        echo $_POST['candidate' . $i];
         $i++;
       }
 
@@ -163,6 +164,13 @@ class Election {
     {
       header("location:election.php?error=1&election=" . $_POST['id']);
     }
+
+    array_push($voted, $_POST['id']);
+    $serial = serialized($voted);
+    $_SESSION['voted'] = $serial;
+
+    $serial = serialize($data);
+    header("location:vote.php?id=" . $_POST['id'] ."&vote=" . $serial);
 
   }
 
