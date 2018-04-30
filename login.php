@@ -48,10 +48,11 @@ class Login
         $servername = $config['servername'];
         $username = $config['username'];
         $password = $config['password'];
-        $dbname = "users";
+        $dbname = $config['dbname'];
+
 
         try {
-            $this->db_connection = new PDO("mysql:host=$this->servername;dbname=$this->dbname", "$this->username", "$this->password");
+            $this->db_connection = new PDO("mysql:host=$servername;dbname=$dbname", "$username", "$password");
             return true;
         } catch (PDOException $e) {
             $this->feedback = "PDO database connection problem: " . $e->getMessage();
@@ -239,15 +240,15 @@ class Login
         if ($result_row) {
             $this->feedback = "Sorry, that username / email is already taken. Please choose another one.";
         } else {
-            $sql = 'INSERT INTO users (user_name, user_password_hash, user_email)
-                    VALUES(:user_name, :user_password_hash, :user_email)';
+            $sql = 'INSERT INTO users (user_name, user_password_hash, user_email, user_campus)
+                    VALUES(:user_name, :user_password_hash, :user_email, :user_campus)';
             $query = $this->db_connection->prepare($sql);
             $query->bindValue(':user_name', $user_name);
             $query->bindValue(':user_password_hash', $user_password_hash);
             $query->bindValue(':user_email', $user_email);
+            $query->bindValue(':user_campus', $user_campus);
 
             $registration_success_state = $query->execute();
-            print_r($query->errorInfo());
 
             if ($registration_success_state) {
                 $this->feedback = "Your account has been created successfully. You can now log in.";
@@ -316,7 +317,7 @@ class Login
     private function showPageRegistration()
     {
         if ($this->feedback) {
-            echo $this->feedback . "<br/><br/>";
+            echo "<script> M.toast({html: " . $this->feedback . "}) </script>" . "<br><br>";
         }
         include('top.php');
 
