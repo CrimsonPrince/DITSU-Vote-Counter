@@ -33,6 +33,7 @@ class Election {
     }
     else
     {
+
             $this->createDatabaseConnection();
             if($this->verifyUser())
             {
@@ -132,6 +133,11 @@ class Election {
     echo '<input class="btn btn-large waves-effects blue col s3 offset-s2" type="submit"  name="login" value="Log in" />';
     echo '</div>';
     include("bottom.php");
+
+    if(isset($_GET['error']))
+    {
+      echo "<script>M.toast({html:'Please Enter Unique Values for your vote'}, 3000, 'rounded');</script>";
+    }
   }
 
   private function countcandidates()
@@ -143,21 +149,21 @@ class Election {
     $query->bindValue(':id', $_POST['id']);
     $query->execute();
     $results = $query->fetchAll();
-    $total = 0;
-    $count = 1;
     $data = array();
-    foreach($results as $result)
-    {
-      $total++;
-    }
-    for($i=1;$i<$total;$i++)
-    {
+    $i = 0;
+
       foreach($results as $result)
       {
         $data += [$result['id'] => $_POST['candidate' . $i]];
+        echo $_POST['candidate' . $i];
+        $i++;
       }
+
+    if(count($data) !== count(array_unique($data)))
+    {
+      header("location:election.php?error=1&election=" . $_POST['id']);
     }
-    print_r($data);
+
   }
 
 }
