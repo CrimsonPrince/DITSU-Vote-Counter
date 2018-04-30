@@ -316,9 +316,6 @@ class Login
 
     private function showPageRegistration()
     {
-        if ($this->feedback) {
-            echo "<script> M.toast({html: " . $this->feedback . "}) </script>" . "<br><br>";
-        }
         include('top.php');
 
         echo '<div class="container grey lighten-2 z-depth-5">';
@@ -359,6 +356,10 @@ class Login
         echo '</div>';
 
         include('bottom.php');
+
+        if ($this->feedback) {
+        echo "<script>M.toast({html:'$this->feedback'}, 3000, 'rounded');</script>"; 
+        }
     }
 }
 
