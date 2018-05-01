@@ -131,7 +131,7 @@ class Election {
             echo '</div>';
     }
     echo '<input type="hidden" name="id" value="' . $_GET['election'] . '"/>';
-    echo '<input class="btn btn-large waves-effects blue col s3 offset-s2" type="submit"  name="login" value="Log in" />';
+    echo '<input class="btn btn-large waves-effects blue col s3 offset-s2" type="submit"  name="Vote" value="Vote" />';
     echo '</div>';
     include("bottom.php");
 
@@ -166,7 +166,7 @@ class Election {
     }
 
     array_push($voted, $_POST['id']);
-    $serial = serialized($voted);
+    $serial = serialize($voted);
     $_SESSION['voted'] = $serial;
 
     $serial = serialize($data);
