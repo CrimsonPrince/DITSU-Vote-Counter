@@ -73,7 +73,6 @@ class VoteCount
       $query->execute();
       $results = $query->fetchAll();
       $count = array_fill(0,$candidatecount + $offset,0);
-
       foreach($results as $result)
       {
         $data = unserialize($result['serialized']);
@@ -85,6 +84,7 @@ class VoteCount
       {
         if($num > $quota)
         {
+          echo "Executed3";
           include("top.php");
           echo "<div class='container'>";
           $result = $this->db_connection->query('select * from candidates where id =' . $key . '')->fetchObject();
@@ -111,6 +111,16 @@ class VoteCount
           echo "</div>";
           include("bottom.php");
         }
+      }
+
+      if($num < $quota)
+      {
+        include("top.php");
+        echo '<div class="container grey lighten-2 z-depth-5">';
+          echo '<p>  This vote was inconclusive no one met the quota </p>';
+        echo "</div>";
+        include("bottom.php");
+
       }
     }
 

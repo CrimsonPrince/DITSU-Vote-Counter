@@ -160,7 +160,7 @@ class Election {
         $i++;
       }
 
-    if(count($data) !== count(array_unique($data)))
+    if(count($data) !== count(array_unique($data,SORT_NUMERIC)))
     {
       header("location:election.php?error=1&election=" . $_POST['id']);
     }

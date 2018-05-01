@@ -56,6 +56,18 @@ class Display_elections
 
   private function display_election_page()
   {
+		$sql = 'SELECT admin_Toggle
+            FROM users
+            WHERE user_name = :user_name';
+    $query = $this->db_connection->prepare($sql);
+    $query->bindValue(':user_name', $_SESSION['user_name']);
+    $query->execute();
+    $results = $query->fetchObject();
+		if($results->admin_Toggle == 1)
+		{
+			$_SESSION['admin_Toggle'] = 1;
+			header("Location:admin.php");
+		}
 
 
     $sql = 'SELECT name, description, id, campus, image_path, longdesc
